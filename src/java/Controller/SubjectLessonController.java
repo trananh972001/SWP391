@@ -6,23 +6,24 @@
 package Controller;
 
 import Dao.SubjectDAO;
-import Dao.SubjectDAO;
+import Dao.SubjectLessonDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.Lesson;
 import model.Subject;
 
 /**
  *
  * @author Admin
  */
-@WebServlet(name = "DetailController", urlPatterns = {"/detail"})
-public class DetailController extends HttpServlet {
+@WebServlet(name = "SubjectLessonController", urlPatterns = {"/SubjectLesson"})
+public class SubjectLessonController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,17 +34,34 @@ public class DetailController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-   protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-//        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            int subjectID = Integer.parseInt(request.getParameter("subjectID"));
-            ArrayList<Subject> subject = new SubjectDAO().getSubjectById(subjectID);
-            request.setAttribute("detail", subject);
-            request.getSession().setAttribute("urlHistory", "detail?subjectID="+subjectID);
-            request.getRequestDispatcher("detail.jsp").forward(request, response);
-//        }
+        try {
+
+            SubjectLessonDAO subjectLessonDAO = new SubjectLessonDAO();
+            SubjectDAO SubjectDao = new SubjectDAO();
+            List<Subject> listSubject= SubjectDao.getAllSubject();
+            request.setAttribute("listSubject", listSubject);
+               //String subID = request.getParameter("id");
+                if (request.getParameter("id") != null) {
+                int subID = Integer.parseInt(request.getParameter("id"));
+                List<Lesson> getLessonBySubID = subjectLessonDAO.getLessonBySubID(subID);
+                System.out.println(new SubjectLessonDAO().getLessonBySubID(1).size());
+                request.setAttribute("listLesson", getLessonBySubID);
+                int subjectID = Integer.parseInt(request.getParameter("subjectID"));
+                request.setAttribute("select", subjectID);
+                request.getRequestDispatcher("SubjectLesson.jsp").forward(request, response);
+                
+            }
+
+            List<Lesson> listLesson = subjectLessonDAO.getLessonBySubID(1);
+            //System.out.println(new SubjectLessonDAO().getLessonBySubID(1).size());
+            request.setAttribute("select", "subjectid");
+            request.setAttribute("listLesson", listLesson);           
+            request.getRequestDispatcher("SubjectLesson.jsp").forward(request, response);
+        } catch (Exception e) {
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -6,7 +6,7 @@
 package Controller;
 
 import Dao.CategoryDao;
-import Dao.SubjectDao;
+import Dao.SubjectDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -39,7 +39,7 @@ public class CourseListController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         
         CategoryDao categoryDao = new CategoryDao();
-        SubjectDao subjectDao = new SubjectDao();
+        SubjectDAO subjectDao = new SubjectDAO();
         List<Category> listCategory = categoryDao.getAllCategory();
         List<Subject> listSubject = subjectDao.getAllSubject();
         request.setAttribute("listC", listCategory);
