@@ -53,7 +53,6 @@ public class SubjectLessonDAO extends DBContext{
         List<Lesson> list = new ArrayList<>();
         String query = "select * from Lesson where subjectID = ?";
         try {
-//            con = new DBContext().getConnection();
             ps = connection.prepareStatement(query);
             ps.setInt(1, id);
             rs = ps.executeQuery();
@@ -113,6 +112,6 @@ public class SubjectLessonDAO extends DBContext{
     }
 
     public static void main(String[] args) {
-        System.out.println(new SubjectLessonDAO().getLessonBySubID(1).size());
+      //System.out.println(new SubjectLessonDAO().getLessonBySubID().size());
     }
 }
