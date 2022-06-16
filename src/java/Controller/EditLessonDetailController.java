@@ -1,0 +1,103 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Controller;
+
+import Dao.AddLessonDAO;
+import Dao.LessonDetailDAO;
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import model.Lesson;
+
+/**
+ *
+ * @author Admin
+ */
+@WebServlet(name = "EditLessonDetailController", urlPatterns = {"/EditLessonDetail"})
+public class EditLessonDetailController extends HttpServlet {
+
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        try {
+            LessonDetailDAO lessonDetailDAO = new LessonDetailDAO();
+            int id = Integer.parseInt(request.getParameter("id"));
+            Lesson getLessonByDetail = lessonDetailDAO.getLessonDetailByID(id);
+            request.setAttribute("getLessonByDetail", getLessonByDetail);
+            request.getRequestDispatcher("EditLessonDetail.jsp").forward(request, response);
+        } catch (Exception e) {
+        }
+    }
+
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String title = request.getParameter("Title");
+        String type = request.getParameter("Type");
+//        boolean myCheckBox = request.getParameter("Type") != null;
+//        if(myCheckBox){
+//            type="true";
+//        }else{
+//            type="false";
+//        }
+        int topicID = Integer.parseInt(request.getParameter("TopicID"));
+        //String subjectID = request.getParameter("subjectID");
+        String status = request.getParameter("Status");
+        int order = Integer.parseInt(request.getParameter("Order"));
+        String videolink = request.getParameter("Video");
+        String content = request.getParameter("Content");
+        LessonDetailDAO lessonDetailDAO = new LessonDetailDAO();
+        lessonDetailDAO.editLessonDetail(title,topicID,type,status,videolink,content,order );
+        response.sendRedirect("LessonDetail");
+    }
+
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }// </editor-fold>
+
+}
